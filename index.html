@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>YourApp – Android App</title>
+<meta name="description" content="Download YourApp for Android.">
+<meta name="theme-color" content="#070b1a">
+<!--
+  SETUP (3 things):
+  1. Put your APK in the same folder as this file and name it  app.apk
+     (or change the href/download values on the download button below).
+  2. Replace "YourApp" and the text with your real app name / copy.
+  3. Push to GitHub -> Settings -> Pages -> Deploy from branch (main, /root).
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;500;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b1a; --bg2:#0d1430; --ink:#eef1ff; --mute:#9aa4d0;
+  --a:#6d7cff; --b:#22e3c0; --c:#ff6ec7;
+  --sans:'Sora',system-ui,sans-serif; --serif:'Instrument Serif',Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);overflow-x:hidden;line-height:1.6}
+canvas#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+main,header,footer{position:relative;z-index:1}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--b);outline-offset:4px}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;justify-content:space-between;align-items:center;
+  padding:calc(16px + env(safe-area-inset-top,0px)) 5vw 16px;backdrop-filter:blur(14px);background:rgba(7,11,26,.45)}
+nav b{font-weight:800;letter-spacing:-.02em;font-size:1.15rem}
+nav a.mini{font-size:.9rem;text-decoration:none;padding:9px 20px;border-radius:99px;background:linear-gradient(120deg,var(--a),var(--b));color:#04101a;font-weight:700}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:4vw;padding:120px 6vw 80px;max-width:1300px;margin:auto}
+.hero h1{font-size:clamp(2.6rem,6.4vw,5.6rem);line-height:1;font-weight:800;letter-spacing:-.045em}
+.hero h1 em{font-family:var(--serif);font-weight:400;font-style:italic;letter-spacing:-.02em;
+  background:linear-gradient(100deg,var(--b),var(--a),var(--c));-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% 100%;animation:shine 6s linear infinite}
+@keyframes shine{to{background-position:200% 0}}
+.hero p{margin:26px 0 34px;max-width:46ch;color:var(--mute);font-size:1.1rem}
+.hero .cta{display:inline-flex;gap:14px;flex-wrap:wrap;align-items:center}
+.ghost{padding:14px 26px;border-radius:99px;border:1px solid rgba(255,255,255,.25);text-decoration:none;transition:.3s}
+.ghost:hover{background:rgba(255,255,255,.08)}
+.scrollhint{margin-top:46px;font-size:.85rem;color:var(--mute);display:flex;gap:10px;align-items:center}
+.scrollhint i{width:22px;height:36px;border:2px solid var(--mute);border-radius:12px;position:relative}
+.scrollhint i::after{content:"";position:absolute;left:50%;top:6px;width:4px;height:8px;margin-left:-2px;border-radius:2px;background:var(--b);animation:wheel 1.6s infinite}
+@keyframes wheel{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(14px)}}
+
+/* PHONE */
+.stage{perspective:1400px;display:flex;justify-content:center}
+.phone{width:min(300px,70vw);aspect-ratio:9/19.2;border-radius:44px;padding:11px;position:relative;
+  background:linear-gradient(145deg,#2b3358,#0a0e20);box-shadow:0 60px 120px -20px rgba(109,124,255,.55),0 0 0 2px #3a4272 inset;
+  transform-style:preserve-3d;animation:float 6s ease-in-out infinite;transition:transform .15s ease-out}
+@keyframes float{50%{translate:0 -18px}}
+.phone::before{content:"";position:absolute;top:18px;left:50%;width:84px;height:22px;margin-left:-42px;background:#000;border-radius:14px;z-index:3}
+.screen{height:100%;border-radius:34px;overflow:hidden;position:relative;background:linear-gradient(170deg,#141c47,#070b1a 70%);padding:56px 18px 18px}
+.screen h4{font-size:1.05rem;margin-bottom:14px}
+.ring{width:130px;height:130px;margin:6px auto 18px;border-radius:50%;background:conic-gradient(var(--b) 0 var(--p,72%),rgba(255,255,255,.08) 0);
+  display:grid;place-items:center;animation:fill 4s ease-in-out infinite alternate}
+@property --p{syntax:'<percentage>';inherits:true;initial-value:20%}
+@keyframes fill{from{--p:20%}to{--p:88%}}
+.ring span{width:104px;height:104px;border-radius:50%;background:#0b1130;display:grid;place-items:center;font-weight:800;font-size:1.5rem}
+.row{display:flex;gap:10px;align-items:center;padding:11px;margin-bottom:9px;border-radius:16px;background:rgba(255,255,255,.06);font-size:.78rem;
+  animation:slide 5s ease-in-out infinite}
+.row:nth-of-type(2){animation-delay:.6s}.row:nth-of-type(3){animation-delay:1.2s}
+@keyframes slide{0%,100%{transform:translateX(0)}50%{transform:translateX(6px);background:rgba(109,124,255,.22)}}
+.dot{width:30px;height:30px;border-radius:10px;flex:none;background:linear-gradient(135deg,var(--a),var(--c))}
+.row:nth-of-type(2) .dot{background:linear-gradient(135deg,var(--b),var(--a))}
+.row:nth-of-type(3) .dot{background:linear-gradient(135deg,var(--c),var(--b))}
+.glow{position:absolute;inset:auto -30% -30% -30%;height:60%;background:radial-gradient(closest-side,rgba(34,227,192,.35),transparent);animation:pulse 4s infinite}
+@keyframes pulse{50%{opacity:.4;transform:scale(1.15)}}
+
+/* FEATURES */
+section{padding:14vh 6vw;max-width:1200px;margin:auto}
+h2{font-size:clamp(2rem,4.5vw,3.6rem);letter-spacing:-.035em;line-height:1.05;margin-bottom:50px;max-width:16ch}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{padding:32px 28px;border-radius:26px;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1)}
+.card:nth-child(2){margin-top:44px}.card:nth-child(3){margin-top:88px}
+.card svg{width:44px;height:44px;margin-bottom:20px;stroke:var(--b);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.card h3{font-size:1.25rem;margin-bottom:8px}
+.card p{color:var(--mute);font-size:.98rem}
+.reveal{opacity:0;transform:translateY(50px);transition:opacity .9s,transform .9s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.card:nth-child(2){transition-delay:.12s}.card:nth-child(3){transition-delay:.24s}
+
+/* DOWNLOAD */
+.dl{text-align:center;padding-bottom:18vh}
+.dl h2{margin:0 auto 20px;max-width:18ch}
+.dl p{color:var(--mute);margin-bottom:44px}
+.btn{position:relative;display:inline-flex;align-items:center;gap:16px;padding:22px 46px;border-radius:99px;font-size:1.25rem;font-weight:800;color:#04101a;text-decoration:none;
+  background:linear-gradient(110deg,var(--b),var(--a) 60%,var(--c));background-size:200% 100%;overflow:hidden;cursor:pointer;
+  box-shadow:0 0 0 0 rgba(34,227,192,.6);animation:ping 2.4s infinite, shine 5s linear infinite;transition:transform .25s}
+.btn:hover{transform:scale(1.06)}
+.btn svg{width:26px;height:26px;stroke:#04101a;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.btn .bar{position:absolute;left:0;bottom:0;height:5px;width:0;background:#04101a}
+.btn.go .bar{animation:bar 2.2s forwards}
+@keyframes bar{to{width:100%}}
+@keyframes ping{70%{box-shadow:0 0 0 30px rgba(34,227,192,0)}100%{box-shadow:0 0 0 0 rgba(34,227,192,0)}}
+.note{margin-top:22px;font-size:.85rem;color:var(--mute);min-height:1.4em}
+footer{text-align:center;padding:30px;color:var(--mute);font-size:.85rem}
+
+@media(max-width:860px){
+  .hero{grid-template-columns:1fr;text-align:center;padding-top:110px}
+  .hero p{margin-inline:auto}.hero .cta,.scrollhint{justify-content:center}
+  .grid{grid-template-columns:1fr}.card:nth-child(n){margin-top:0}
+  h2{max-width:none}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<nav>
+  <b>YourApp</b>
+  <a class="mini" href="#download">Download</a>
+</nav>
+
+<header class="hero">
+  <div>
+    <h1>Your ideas, <em>in your pocket.</em></h1>
+    <p>YourApp is a fast, free Android app that does one thing well. Install it in seconds and start using it today.</p>
+    <div class="cta">
+      <a class="ghost" href="#features">See what it does</a>
+    </div>
+    <div class="scrollhint"><i></i>Scroll to download</div>
+  </div>
+  <div class="stage">
+    <div class="phone" id="phone">
+      <div class="screen">
+        <h4>Today</h4>
+        <div class="ring"><span>72%</span></div>
+        <div class="row"><div class="dot"></div>Synced just now</div>
+        <div class="row"><div class="dot"></div>3 new updates</div>
+        <div class="row"><div class="dot"></div>Backup complete</div>
+        <div class="glow"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="features">
+    <h2 class="reveal">Built to feel instant.</h2>
+    <div class="grid">
+      <article class="card reveal">
+        <svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>
+        <h3>Fast</h3><p>Opens in under a second and stays smooth on any Android phone.</p>
+      </article>
+      <article class="card reveal">
+        <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        <h3>Private</h3><p>Your data stays on your device. No account needed.</p>
+      </article>
+      <article class="card reveal">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <h3>Always ready</h3><p>Works offline and syncs the moment you reconnect.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="download" class="dl">
+    <h2 class="reveal">Get the app. It's free.</h2>
+    <p class="reveal">Tap the button and the APK downloads straight to your phone.</p>
+
+    <!-- DIRECT DOWNLOAD BUTTON: change app.apk to your file name -->
+    <a class="btn reveal" id="dlbtn" href="app.apk" download="YourApp.apk">
+      <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0 5-5m-5 5-5-5M4 20h16"/></svg>
+      Download for Android
+      <span class="bar"></span>
+    </a>
+    <div class="note" id="note">Android 8.0+ · APK file</div>
+  </section>
+</main>
+
+<footer>© <span id="yr"></span> YourApp. If Android warns about unknown apps, allow installs from your browser once.</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* Scroll reveal */
+const io = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.2});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* Download feedback (download itself is a plain <a download>, no redirect) */
+const btn = document.getElementById('dlbtn'), note = document.getElementById('note');
+btn.addEventListener('click',()=>{
+  btn.classList.remove('go'); void btn.offsetWidth; btn.classList.add('go');
+  note.textContent = 'Download started. Open the file from your notifications to install.';
+});
+
+/* Phone tilt on pointer move */
+const phone = document.getElementById('phone');
+if(matchMedia('(pointer:fine)').matches){
+  addEventListener('pointermove',e=>{
+    const x=(e.clientX/innerWidth-.5), y=(e.clientY/innerHeight-.5);
+    phone.style.transform=`rotateY(${x*22}deg) rotateX(${-y*16}deg)`;
+  });
+}
+
+/* Animated background: drifting glowing orbs + connected particles, sharp on retina */
+const cv=document.getElementById('bg'), ctx=cv.getContext('2d');
+let W,H,D,P=[],mx=-999,my=-999;
+function size(){
+  D=Math.min(devicePixelRatio||1,2); W=innerWidth; H=innerHeight;
+  cv.width=W*D; cv.height=H*D; ctx.setTransform(D,0,0,D,0,0);
+  const n=Math.round(Math.min(90,W*H/16000));
+  P=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.8+.6}));
+}
+addEventListener('resize',size); size();
+addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY});
+const orbs=[['109,124,255',.28],['34,227,192',.2],['255,110,199',.18]];
+let t=0;
+function draw(){
+  t+=.004;
+  ctx.fillStyle='#070b1a'; ctx.fillRect(0,0,W,H);
+  orbs.forEach(([c,a],i)=>{
+    const x=W*(.5+.38*Math.sin(t*(1+i*.4)+i*2)), y=H*(.5+.34*Math.cos(t*(.8+i*.3)+i));
+    const r=Math.max(W,H)*.42, g=ctx.createRadialGradient(x,y,0,x,y,r);
+    g.addColorStop(0,`rgba(${c},${a})`); g.addColorStop(1,`rgba(${c},0)`);
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  });
+  for(const p of P){
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.x<0||p.x>W)p.vx*=-1; if(p.y<0||p.y>H)p.vy*=-1;
+    const dx=p.x-mx, dy=p.y-my, d=Math.hypot(dx,dy);
+    if(d<140){p.x+=dx/d*1.2; p.y+=dy/d*1.2}
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283); ctx.fillStyle='rgba(200,215,255,.75)'; ctx.fill();
+  }
+  for(let i=0;i<P.length;i++)for(let j=i+1;j<P.length;j++){
+    const d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y);
+    if(d<110){ctx.strokeStyle=`rgba(140,160,255,${.18*(1-d/110)})`;ctx.lineWidth=.7;ctx.beginPath();ctx.moveTo(P[i].x,P[i].y);ctx.lineTo(P[j].x,P[j].y);ctx.stroke()}
+  }
+  requestAnimationFrame(draw);
+}
+if(matchMedia('(prefers-reduced-motion:reduce)').matches){t=1;draw=()=>{}; }
+requestAnimationFrame(draw);
+</script>
+</body>
+</html>
