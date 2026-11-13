@@ -1,3 +1,22 @@
+Practical 1 – Simple and Multiple Linear Regression
+Aim:
+To implement Simple Linear Regression using NumPy and Scikit-learn and Multiple Linear Regression to predict marks based on study hours and attendance.
+Theory:
+Linear Regression is a supervised machine learning algorithm used to predict continuous values.
+1. Simple Linear Regression (SLR): Uses one independent variable to predict a dependent variable.
+Equation: y = mX + c
+2. Multiple Linear Regression (MLR): Uses two or more independent variables to predict a dependent variable.
+3. NumPy: Used to calculate slope and intercept mathematically.
+4. Model Evaluation: MAE, RMSE and R² are used to measure prediction performance.
+5. Visualization: Regression line and residual plots help analyze model performance.
+Conclusion:
+Successfully implemented Simple Linear Regression using NumPy and Scikit-learn and Multiple Linear Regression. Predicted marks and evaluated model performance using different metrics and graphs.
+
+
+
+
+
+
 # Practical 1: Simple and Multiple Linear Regression
 
 import numpy as np
